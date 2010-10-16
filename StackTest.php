@@ -1,20 +1,33 @@
 <?php
 require_once 'PHPUnit/Framework.php';
 
-
 class StackTest extends PHPUnit_Framework_TestCase {
-  public function testPushAndPop() {
+
+  public function testEmpty() {
     $stack = array();
-    $this->assertEquals(0, count($stack));
-    
+    $this->assertTrue(empty($stack));
+
+    return $stack;
+  }
+
+  /**
+   * @depends testEmpty
+   */
+  public function testPush(array $stack) {
     array_push($stack, 'foo');
     $this->assertEquals('foo', $stack[count($stack)-1]);
-    $this->assertEquals(1, count($stack));
+    $this->assertFalse(empty($stack));
     
-    $this->assertEquals('foo', array_pop($stack));
-    $this->assertEquals(0, count($stack));
-    
+    return $stack;
   }
-}
 
+  /**
+   * @depends testPush
+   */
+  public function testPop(array $stack) {
+    $this->assertEquals('foo', array_pop($stack));
+    $this->assertTrue(empty($stack));
+  }
+
+}
 ?>
